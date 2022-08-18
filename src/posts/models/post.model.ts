@@ -1,4 +1,10 @@
-import {Column, DataType, Model, Table} from 'sequelize-typescript';
+import {BelongsToMany, Column, DataType, Model, Table} from 'sequelize-typescript';
+import {UsersPosts} from '../../users/models/users-posts.model';
+import {User} from '../../users/models/user.model';
+import {Reaction} from '../../reactions/models/reaction.model';
+import {HashTag} from '../../hashtags/models/hashtag.model';
+import {PostsReactions} from './posts-reactions.model';
+import {PostsHashTags} from './posts-hashTags.model';
 
 interface  PostCreationAttrs {
 	title: string;
@@ -27,4 +33,13 @@ export class Post extends Model<Post, PostCreationAttrs> {
 		allowNull: false
 	})
 	content: string;
+
+	@BelongsToMany(() => User, () => UsersPosts)
+	users: User[]
+
+	@BelongsToMany(() => Reaction, () => PostsReactions)
+	reactions: Reaction[]
+
+	@BelongsToMany(() => HashTag, () => PostsHashTags)
+	hashTags: HashTag[]
 }

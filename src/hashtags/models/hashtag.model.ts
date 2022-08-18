@@ -1,4 +1,6 @@
-import {Column, DataType, Model, Table} from 'sequelize-typescript';
+import {BelongsToMany, Column, DataType, Model, Table} from 'sequelize-typescript';
+import {Post} from '../../posts/models/post.model';
+import {PostsHashTags} from '../../posts/models/posts-hashTags.model';
 
 interface  HashTagCreationAttrs {
 	hashTag: string;
@@ -20,4 +22,7 @@ export class HashTag extends Model<HashTag, HashTagCreationAttrs> {
 		unique: true
 	})
 	hashTag: string;
+
+	@BelongsToMany(() => Post, () => PostsHashTags)
+	posts: Post[]
 }
