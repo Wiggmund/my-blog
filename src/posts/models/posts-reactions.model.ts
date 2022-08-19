@@ -13,6 +13,12 @@ export class PostsReactions extends Model<PostsReactions> {
 	})
 	id: number;
 
+	@Column({
+		type: DataType.INTEGER,
+		defaultValue: 1
+	})
+	quantity: number;
+
 	@ForeignKey(() => Post)
 	@Column({type: DataType.INTEGER})
 	postId: number;

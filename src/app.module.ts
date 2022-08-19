@@ -5,6 +5,7 @@ import { ReactionsModule } from './reactions/reactions.module';
 import { RolesModule } from './roles/roles.module';
 import { HashtagsModule } from './hashtags/hashtags.module';
 import { SequelizeModule } from '@nestjs/sequelize';
+import {UtilsModule} from './utils/utils.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
     ReactionsModule,
     RolesModule,
     HashtagsModule,
+    UtilsModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: 'localhost',
@@ -21,7 +23,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
       password: 'root',
       database: 'my_blog',
       autoLoadModels: true,
-      synchronize: true
     })
   ],
   controllers: [],
