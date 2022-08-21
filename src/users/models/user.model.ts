@@ -14,10 +14,7 @@ interface  UserCreationAttrs {
 
 @Table({tableName: 'users'})
 export class User extends Model<User, UserCreationAttrs> {
-	@ApiProperty({
-		description: 'Unique user id',
-		example: 1
-	})
+	@ApiProperty({description: 'Unique user id', example: 1})
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
@@ -27,10 +24,7 @@ export class User extends Model<User, UserCreationAttrs> {
 	id: number;
 
 
-	@ApiProperty({
-		description: 'User name',
-		example: 'Jack'
-	})
+	@ApiProperty({description: 'User name', example: 'Jack'})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,
@@ -39,10 +33,7 @@ export class User extends Model<User, UserCreationAttrs> {
 	username: string;
 
 
-	@ApiProperty({
-		description: 'User email',
-		example: 'example2000@gmail.com'
-	})
+	@ApiProperty({description: 'User email', example: 'example2000@gmail.com'})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,
@@ -51,10 +42,7 @@ export class User extends Model<User, UserCreationAttrs> {
 	email: string;
 
 
-	@ApiProperty({
-		description: 'User password',
-		example: 'SomePassword2022@'
-	})
+	@ApiProperty({description: 'User password', example: 'SomePassword2022@'})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false
@@ -62,10 +50,7 @@ export class User extends Model<User, UserCreationAttrs> {
 	password: string;
 
 
-	@ApiProperty({
-		description: 'User avatar',
-		required: false
-	})
+	@ApiProperty({description: 'User avatar', required: false})
 	@Column({
 		type: DataType.STRING,
 		allowNull: true

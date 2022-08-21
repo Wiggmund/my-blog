@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
 import {ReactionsService} from './reactions.service';
 import {CreateReactionDto} from './dto/create-reaction.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Reaction} from './models/reaction.model';
 import {Post as PostModel} from '../posts/models/post.model';
+import {ValidationPipe} from '../common/pipes/validation.pipe';
 
 @ApiTags('Reactions')
 @Controller('reactions')
@@ -35,6 +36,7 @@ export class ReactionsController {
 
 	@ApiOperation({description: 'Create reaction'})
 	@ApiResponse({status: 200, type: Reaction})
+	@UsePipes(ValidationPipe)
 	@Post()
 	createReaction(@Body() createReactionDto: CreateReactionDto) {
 		return this.reactionsService.createReaction(createReactionDto);
@@ -42,6 +44,7 @@ export class ReactionsController {
 
 	@ApiOperation({description: 'Remove reaction'})
 	@ApiResponse({status: 200, type: Reaction})
+	@UsePipes(ValidationPipe)
 	@Post('remove')
 	removeReaction(@Body() removeReactionDto: CreateReactionDto) {
 		return this.reactionsService.removeReaction(removeReactionDto.reaction);

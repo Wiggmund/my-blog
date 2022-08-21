@@ -9,10 +9,7 @@ interface  HashTagCreationAttrs {
 
 @Table({tableName: 'hashTags'})
 export class HashTag extends Model<HashTag, HashTagCreationAttrs> {
-	@ApiProperty({
-		description: 'Unique hasTag id',
-		example: 1
-	})
+	@ApiProperty({description: 'Unique hasTag id', example: 1})
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
@@ -21,10 +18,7 @@ export class HashTag extends Model<HashTag, HashTagCreationAttrs> {
 	})
 	id: number;
 
-	@ApiProperty({
-		description: 'HashTag',
-		example: "javascript"
-	})
+	@ApiProperty({description: 'HashTag', example: "javascript"})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,

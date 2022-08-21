@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
 import {HashtagsService} from './hashtags.service';
 import {CreateHashTagDto} from './dto/create-hashTag.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {HashTag} from './models/hashtag.model';
 import {Post as PostModel} from '../posts/models/post.model';
+import {ValidationPipe} from '../common/pipes/validation.pipe';
 
 @ApiTags('HashTags')
 @Controller('hashtags')
@@ -35,6 +36,7 @@ export class HashtagsController {
 
 	@ApiOperation({description: 'Create hashTag'})
 	@ApiResponse({status: 200, type: HashTag})
+	@UsePipes(ValidationPipe)
 	@Post()
 	createHashTag(@Body() hasTagDto: CreateHashTagDto) {
 		return this.hashTagsService.createHashTag(hasTagDto);
@@ -42,6 +44,7 @@ export class HashtagsController {
 
 	@ApiOperation({description: 'Remove hashTag'})
 	@ApiResponse({status: 200, type: HashTag})
+	@UsePipes(ValidationPipe)
 	@Post('remove')
 	removeHashTag(@Body() hasTagDto: CreateHashTagDto) {
 		return this.hashTagsService.removeHashTag(hasTagDto);

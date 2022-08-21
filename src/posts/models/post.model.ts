@@ -14,10 +14,7 @@ interface  PostCreationAttrs {
 
 @Table({tableName: 'posts'})
 export class Post extends Model<Post, PostCreationAttrs> {
-	@ApiProperty({
-		description: 'Unique post id',
-		example: 1
-	})
+	@ApiProperty({description: 'Unique post id', example: 1})
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
@@ -27,10 +24,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	id: number;
 
 
-	@ApiProperty({
-		description: 'Post title',
-		example: 'My first Post'
-	})
+	@ApiProperty({description: 'Post title', example: 'My first Post'})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,
@@ -38,10 +32,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	})
 	title: string;
 
-	@ApiProperty({
-		description: 'Post content',
-		example: 'We are going to talk...'
-	})
+	@ApiProperty({description: 'Post content', example: 'We are going to talk...'})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false

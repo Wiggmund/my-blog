@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {CreateUserDto} from './dto/create-user.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {User} from './models/user.model';
 import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
+import {ValidationPipe} from '../common/pipes/validation.pipe';
 
 @ApiTags('Users')
 @Controller('users')
@@ -42,6 +43,7 @@ export class UsersController {
 
 	@ApiOperation({description: 'Create new user'})
 	@ApiResponse({status: 200, type: User})
+	@UsePipes(ValidationPipe)
 	@Post()
 	createUser(@Body() userDto: CreateUserDto) {
 		return this.usersService.createUser(userDto);
@@ -49,6 +51,7 @@ export class UsersController {
 
 	@ApiOperation({description: 'Add specific role for user with given id'})
 	@ApiResponse({status: 200, type: User})
+	@UsePipes(ValidationPipe)
 	@Post('add/role')
 	addRole(@Body() addRoleDto: AddRemoveRoleDto) {
 		return this.usersService.addRole(addRoleDto);
@@ -56,6 +59,7 @@ export class UsersController {
 
 	@ApiOperation({description: 'Remove specific role for user with given id'})
 	@ApiResponse({status: 200, type: User})
+	@UsePipes(ValidationPipe)
 	@Post('remove/role')
 	removeRole(@Body() removeRoleDto: AddRemoveRoleDto) {
 		return this.usersService.removeRole(removeRoleDto);

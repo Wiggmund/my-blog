@@ -9,10 +9,7 @@ interface  ReactionCreationAttrs {
 
 @Table({tableName: 'reactions'})
 export class Reaction extends Model<Reaction, ReactionCreationAttrs> {
-	@ApiProperty({
-		description: 'Unique reaction id',
-		example: 1
-	})
+	@ApiProperty({description: 'Unique reaction id', example: 1})
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
@@ -21,10 +18,7 @@ export class Reaction extends Model<Reaction, ReactionCreationAttrs> {
 	})
 	id: number;
 
-	@ApiProperty({
-		description: 'Reaction value',
-		example: "like"
-	})
+	@ApiProperty({description: 'Reaction value', example: "like"})
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,

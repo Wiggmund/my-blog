@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {PostsService} from './posts.service';
 import {Post as PostModel} from './models/post.model';
@@ -9,6 +9,7 @@ import {CreatePostDto} from './dto/create-post.dto';
 import {AddRemoveReactionDto} from '../reactions/dto/add-remove-reaction.dto';
 import {AddRemoveHashTagDto} from '../hashtags/dto/add-remove-hashTag.dto';
 import {AddRemoveUserDto} from '../users/dto/add-remove-user.dto';
+import {ValidationPipe} from '../common/pipes/validation.pipe';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -54,6 +55,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Create new post'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post()
 	createPost(@Body() postDto: CreatePostDto) {
 		return this.postsService.createPost(postDto);
@@ -61,6 +63,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Add or increment (if this reaction exists) specific reaction for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('add/reaction')
 	addOrIncrementReaction(@Body() addReactionDto: AddRemoveReactionDto) {
 		return this.postsService.addOrIncrementReaction(addReactionDto);
@@ -68,6 +71,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Remove or decrement (if this reaction exists) specific reaction for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('remove/reaction')
 	removeOrDecrementReaction(@Body() removeReactionDto: AddRemoveReactionDto) {
 		return this.postsService.removeOrDecrementReaction(removeReactionDto);
@@ -75,6 +79,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Add specific hashtag for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('add/hashTag')
 	addHashTag(@Body() addHashTagDto: AddRemoveHashTagDto) {
 		return this.postsService.addHashTag(addHashTagDto);
@@ -82,6 +87,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Remove specific hashtag for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('remove/hashTag')
 	removeHashTag(@Body() removeHashTagDto: AddRemoveHashTagDto) {
 		return this.postsService.removeHashTag(removeHashTagDto);
@@ -89,6 +95,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Add author for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('add/user')
 	addUser(@Body() addUserDto: AddRemoveUserDto) {
 		return this.postsService.addUser(addUserDto);
@@ -96,6 +103,7 @@ export class PostsController {
 
 	@ApiOperation({description: 'Remove author for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
+	@UsePipes(ValidationPipe)
 	@Post('remove/user')
 	removeUser(@Body() addUserDto: AddRemoveUserDto) {
 		return this.postsService.removeUser(addUserDto);
