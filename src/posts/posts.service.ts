@@ -37,11 +37,33 @@ export class PostsService {
 	}
 
 	async getPostReactions(id: number): Promise<Reaction[]> {
-		return (await this.postModel.findByPk(id, {include: Reaction})).reactions;
+		const reactions = (await this.postModel.findByPk(id,
+			{
+				include: {
+					model: Reaction,
+					attributes: ['id', 'reaction'],
+					through: {attributes: ['quantity']}}
+			}
+		)).reactions;
+
+		return reactions.map((item) => {
+			return {
+				id: item.id,
+				reaction: item.reaction,
+				quantity: item.PostsReactions.quantity
+			};
+		});
 	}
 
 	async getPostHashTags(id: number): Promise<HashTag[]> {
-		return (await this.postModel.findByPk(id, {include: HashTag})).hashTags;
+		return (await this.postModel.findByPk(id,
+			{
+				include: {
+					model: HashTag,
+					attributes: ['id', 'hashTag'],
+					through: {attributes: []}}
+			}
+		)).hashTags;
 	}
 
 	async createPost(postDto: CreatePostDto): Promise<Post> {
