@@ -32,6 +32,11 @@ export class RolesService {
 	}
 
 	async createRole(roleDto: CreateRoleDto): Promise<Role> {
-		return await this.roleModel.create(roleDto);
+		return await this.roleModel.create(
+			{
+				...roleDto,
+				role: roleDto.role.toUpperCase()
+			}
+		);
 	}
 }
