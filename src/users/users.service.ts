@@ -17,7 +17,7 @@ export class UsersService {
 	) {}
 
 	async getAllUsers(): Promise<User[]> {
-		return this.userModel.findAll({include:[RefreshToken]});
+		return this.userModel.findAll();
 	}
 
 	async getUserByEmail(email: string): Promise<User> {

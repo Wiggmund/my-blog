@@ -23,7 +23,11 @@ export class AuthService {
 		const hashedPassword = await bcrypt.hash(userDto.password, 5);
 		const user = await this.userService.createUser({...userDto, password: hashedPassword});	
 
-		const userPayload = new UserPayloadDto(user);
+		const userPayload = new UserPayloadDto(
+			user,
+			await this.userService.getUserRoles(user.id)
+		);
+
 		const tokens = await this.generateAndSaveTokens(userPayload);
 		return {
 			...tokens,
@@ -43,7 +47,10 @@ export class AuthService {
 			throw new UnauthorizedException();
 		}
 
-		const userPayload = new UserPayloadDto(user);
+		const userPayload = new UserPayloadDto(
+			user,
+			await this.userService.getUserRoles(user.id)
+		);
 		const tokens = await this.generateAndSaveTokens(userPayload);
 		return {
 			...tokens,
