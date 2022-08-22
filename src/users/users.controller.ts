@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Res, UsePipes} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {CreateUserDto} from './dto/create-user.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
@@ -8,6 +8,8 @@ import {ValidationPipe} from '../common/pipes/validation.pipe';
 import { AuthService } from 'src/auth/auth.service';
 import { RefreshAccessTokens } from 'src/auth/dto/refresh-access-tokens.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { Response } from 'express';
+import { REFRESH_TOKEN_EXPIRES_DAYS } from 'src/common/constants';
 
 @ApiTags('Users')
 @Controller('users')
@@ -21,16 +23,32 @@ export class UsersController {
 	@ApiResponse({status: 200, type: RefreshAccessTokens})
 	@UsePipes(ValidationPipe)
 	@Post('/register')
-	register(@Body() userDto: CreateUserDto) {
-		return this.authService.register(userDto);
+	async register(
+		@Body() userDto: CreateUserDto,
+		@Res({ passthrough: true }) response: Response
+	) {
+		const userData = await this.authService.register(userDto);
+		response.cookie('refreshToken', userData.refreshToken, {
+			httpOnly: true,
+			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
+		})
+		return userData;
 	}
 
 	@ApiOperation({description: 'Login into user account'})
 	@ApiResponse({status: 200, type: RefreshAccessTokens})
 	@UsePipes(ValidationPipe)
 	@Post('/login')
-	login(@Body() userDto: LoginUserDto) {
-		return this.authService.login(userDto);
+	async login(
+		@Body() userDto: LoginUserDto,
+		@Res({ passthrough: true }) response: Response
+	) {
+		const userData = await this.authService.login(userDto);
+		response.cookie('refreshToken', userData.refreshToken, {
+			httpOnly: true,
+			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
+		})
+		return userData;
 	}
 
 	@ApiOperation({description: 'Retrieve all users'})

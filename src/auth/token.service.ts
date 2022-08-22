@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {ACCESS_TOKEN, REFRESH_TOKEN} from '../common/constants';
+import {ACCESS_TOKEN, ACCESS_TOKEN_EXPIRES_MINUTES, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRES_DAYS} from '../common/constants';
 import {JwtService} from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { RefreshToken } from './models/token.model';
@@ -16,12 +16,12 @@ export class TokenService {
 	generateToken(payload): RefreshAccessTokens {
 		const accessToken = this.jwtService.sign(payload, {
 			secret: ACCESS_TOKEN,
-			expiresIn: '15m'
+			expiresIn: `${ACCESS_TOKEN_EXPIRES_MINUTES}m`
 		});
 
 		const refreshToken = this.jwtService.sign(payload, {
 			secret: REFRESH_TOKEN,
-			expiresIn: '30d'
+			expiresIn: `${REFRESH_TOKEN_EXPIRES_DAYS}d`
 		});
 
 		return {accessToken, refreshToken};
