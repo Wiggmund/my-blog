@@ -1,11 +1,15 @@
-import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateRoleDto} from './dto/create-role.dto';
 import {RolesService} from './roles.service';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Role} from './models/role.model';
 import {User} from '../users/models/user.model';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 
+@Roles('ADMIN')
+@UseGuards(JwtRolesGuard)
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {

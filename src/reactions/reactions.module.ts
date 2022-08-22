@@ -4,11 +4,13 @@ import { ReactionsController } from './reactions.controller';
 import {SequelizeModule} from '@nestjs/sequelize';
 import {Reaction} from './models/reaction.model';
 import {UtilsModule} from '../utils/utils.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Reaction]),
-    UtilsModule
+    UtilsModule,
+	AuthModule
   ],
   providers: [ReactionsService],
   controllers: [ReactionsController],

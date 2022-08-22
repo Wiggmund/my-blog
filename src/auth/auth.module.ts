@@ -6,6 +6,7 @@ import {JwtModule} from '@nestjs/jwt';
 import {TokenService} from './token.service';
 import {SequelizeModule} from '@nestjs/sequelize';
 import {RefreshToken} from './models/token.model';
+import { JwtRolesGuard } from './guards/jwt-roles.guard';
 
 @Module({
   imports: [
@@ -15,11 +16,14 @@ import {RefreshToken} from './models/token.model';
   ],
   providers: [
     AuthService,
-    TokenService
+    TokenService,
+	JwtRolesGuard
   ],
   controllers: [AuthController],
   exports: [
-    AuthService
+    AuthService,
+	TokenService,
+	JwtRolesGuard
   ]
 })
 export class AuthModule {}

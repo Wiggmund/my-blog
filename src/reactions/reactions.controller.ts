@@ -1,11 +1,15 @@
-import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {ReactionsService} from './reactions.service';
 import {CreateReactionDto} from './dto/create-reaction.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Reaction} from './models/reaction.model';
 import {Post as PostModel} from '../posts/models/post.model';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 
+@Roles('ADMIN')
+@UseGuards(JwtRolesGuard)
 @ApiTags('Reactions')
 @Controller('reactions')
 export class ReactionsController {

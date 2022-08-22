@@ -28,7 +28,27 @@ export class TokenService {
 	}
 
 	async validateAccessToken(token: string) {
+		try {
+			const payloadData = this.jwtService.verify(token, {
+				secret: ACCESS_TOKEN
+			});
 
+			return payloadData;
+		} catch(e) {
+			return null;
+		}
+	}
+
+	async validateRefreshToken(token: string) {
+		try {
+			const payloadData = this.jwtService.verify(token, {
+				secret: REFRESH_TOKEN
+			});
+
+			return payloadData;
+		} catch(e) {
+			return null;
+		}
 	}
 
 	async saveToken(userId: number, refreshToken: string): Promise<RefreshToken> {

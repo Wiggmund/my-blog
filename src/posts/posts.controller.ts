@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {PostsService} from './posts.service';
 import {Post as PostModel} from './models/post.model';
@@ -10,7 +10,11 @@ import {AddRemoveReactionDto} from '../reactions/dto/add-remove-reaction.dto';
 import {AddRemoveHashTagDto} from '../hashtags/dto/add-remove-hashTag.dto';
 import {AddRemoveUserDto} from '../users/dto/add-remove-user.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 
+@Roles('ADMIN')
+@UseGuards(JwtRolesGuard)
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {

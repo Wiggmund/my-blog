@@ -1,55 +1,21 @@
-import {Body, Controller, Get, Param, Post, Res, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Res, UseGuards, UsePipes} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {CreateUserDto} from './dto/create-user.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {User} from './models/user.model';
 import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
-import { AuthService } from 'src/auth/auth.service';
-import { RefreshAccessTokens } from 'src/auth/dto/refresh-access-tokens.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { Response } from 'express';
-import { REFRESH_TOKEN_EXPIRES_DAYS } from 'src/common/constants';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 
+@Roles('ADMIN')
+@UseGuards(JwtRolesGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
 	constructor(
-		private usersService: UsersService,
-		private authService: AuthService
+		private usersService: UsersService
 	) {}
-
-	@ApiOperation({description: 'Register a new user'})
-	@ApiResponse({status: 200, type: RefreshAccessTokens})
-	@UsePipes(ValidationPipe)
-	@Post('/register')
-	async register(
-		@Body() userDto: CreateUserDto,
-		@Res({ passthrough: true }) response: Response
-	) {
-		const userData = await this.authService.register(userDto);
-		response.cookie('refreshToken', userData.refreshToken, {
-			httpOnly: true,
-			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
-		})
-		return userData;
-	}
-
-	@ApiOperation({description: 'Login into user account'})
-	@ApiResponse({status: 200, type: RefreshAccessTokens})
-	@UsePipes(ValidationPipe)
-	@Post('/login')
-	async login(
-		@Body() userDto: LoginUserDto,
-		@Res({ passthrough: true }) response: Response
-	) {
-		const userData = await this.authService.login(userDto);
-		response.cookie('refreshToken', userData.refreshToken, {
-			httpOnly: true,
-			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
-		})
-		return userData;
-	}
 
 	@ApiOperation({description: 'Retrieve all users'})
 	@ApiResponse({status: 200, type: [User]})

@@ -1,11 +1,15 @@
-import {Body, Controller, Get, Param, Post, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {HashtagsService} from './hashtags.service';
 import {CreateHashTagDto} from './dto/create-hashTag.dto';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {HashTag} from './models/hashtag.model';
 import {Post as PostModel} from '../posts/models/post.model';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 
+@Roles('ADMIN')
+@UseGuards(JwtRolesGuard)
 @ApiTags('HashTags')
 @Controller('hashtags')
 export class HashtagsController {
