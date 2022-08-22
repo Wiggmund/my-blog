@@ -1,9 +1,10 @@
-import {BelongsToMany, Column, DataType, Model, Table} from 'sequelize-typescript';
+import {BelongsTo, BelongsToMany, Column, DataType, HasOne, Model, Table} from 'sequelize-typescript';
 import {Post} from '../../posts/models/post.model';
 import {Role} from '../../roles/models/role.model';
 import {UsersPosts} from './users-posts.model';
 import {UsersRoles} from './users-roles.model';
 import {ApiProperty} from '@nestjs/swagger';
+import {RefreshToken} from '../../auth/models/token.model';
 
 interface  UserCreationAttrs {
 	username: string;
@@ -50,12 +51,26 @@ export class User extends Model<User, UserCreationAttrs> {
 	password: string;
 
 
+	@ApiProperty({description: 'Whether user activate account by email', example: 'SomePassword2022@'})
+	@Column({
+		type: DataType.STRING,
+		allowNull: false,
+		defaultValue: false
+	})
+	isActivated: boolean;
+
 	@ApiProperty({description: 'User avatar', required: false})
 	@Column({
 		type: DataType.STRING,
 		allowNull: true
 	})
 	photo: string;
+
+	// @BelongsTo(() => RefreshToken, 'tokenId')
+	// userToken: string;
+
+	@HasOne(() => RefreshToken, 'userId')
+	userToken: RefreshToken
 
 	@BelongsToMany(() => Post, () => UsersPosts)
 	posts: Post[]

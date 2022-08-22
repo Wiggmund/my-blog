@@ -16,6 +16,12 @@ export const PipeStringErrorMessages = {
 		}
 		return `Is too long, maximum length is ${data.constraints[0]} characters you provide ${data.value.length || 0}`;
 	},
+	mustBeJwt: (data: ValidationArguments) => {
+		if (data.value === undefined) {
+			return `You didn't provide value for $property`;
+		}
+		return `Is not valid value. You provide ${data.value.length || 0}`;
+	},
 	mustBeEmail: 'Must be an email. You provide [ $value ]',
 	defaultMinLength: 2
 };

@@ -6,6 +6,7 @@ import {RolesService} from '../roles/roles.service';
 import {Role} from '../roles/models/role.model';
 import {Post} from '../posts/models/post.model';
 import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
+import { RefreshToken } from 'src/auth/models/token.model';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,11 @@ export class UsersService {
 	) {}
 
 	async getAllUsers(): Promise<User[]> {
-		return this.userModel.findAll();
+		return this.userModel.findAll({include:[RefreshToken]});
+	}
+
+	async getUserByEmail(email: string): Promise<User> {
+		return this.userModel.findOne({where: {email}});
 	}
 
 	async getUserById(id: number): Promise<User> {

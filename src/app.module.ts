@@ -6,6 +6,7 @@ import { RolesModule } from './roles/roles.module';
 import { HashtagsModule } from './hashtags/hashtags.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import {UtilsModule} from './utils/utils.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import {UtilsModule} from './utils/utils.module';
       password: 'root',
       database: 'my_blog',
       autoLoadModels: true,
-    })
+    }),
+    AuthModule
   ],
   controllers: [],
   providers: [],

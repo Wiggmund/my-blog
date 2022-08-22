@@ -5,13 +5,33 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {User} from './models/user.model';
 import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
+import { AuthService } from 'src/auth/auth.service';
+import { RefreshAccessTokens } from 'src/auth/dto/refresh-access-tokens.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
 	constructor(
-		private usersService: UsersService
+		private usersService: UsersService,
+		private authService: AuthService
 	) {}
+
+	@ApiOperation({description: 'Register a new user'})
+	@ApiResponse({status: 200, type: RefreshAccessTokens})
+	@UsePipes(ValidationPipe)
+	@Post('/register')
+	register(@Body() userDto: CreateUserDto) {
+		return this.authService.register(userDto);
+	}
+
+	@ApiOperation({description: 'Login into user account'})
+	@ApiResponse({status: 200, type: RefreshAccessTokens})
+	@UsePipes(ValidationPipe)
+	@Post('/login')
+	login(@Body() userDto: LoginUserDto) {
+		return this.authService.login(userDto);
+	}
 
 	@ApiOperation({description: 'Retrieve all users'})
 	@ApiResponse({status: 200, type: [User]})

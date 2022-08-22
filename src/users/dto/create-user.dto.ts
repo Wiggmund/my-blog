@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsEmail, IsOptional, IsString, MinLength} from 'class-validator';
+import {IsEmail, IsJWT, IsOptional, IsString, MinLength} from 'class-validator';
 import {PipeStringErrorMessages} from '../../common/pipe-err-messages';
 
 export class CreateUserDto {
