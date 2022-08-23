@@ -43,6 +43,10 @@ export class RolesService {
 		);
 	}
 
+	async deleteRole(role: string) {
+		return this.roleModel.destroy({where: {role}})
+	}
+
 	async addRole(addRoleDto: AddRemoveRoleDto): Promise<User> {
 		const {user, role} = await this.getUserAndRole(addRoleDto);
 		await user.$add('roles', role);

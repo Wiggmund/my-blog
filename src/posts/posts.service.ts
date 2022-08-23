@@ -79,6 +79,10 @@ export class PostsService {
 		return newPost;
 	}
 
+	async deletePost(id: number) {
+		return this.postModel.destroy({where: {id}});
+	}
+
 	async addOrIncrementReaction(addReactionDto: AddRemoveReactionDto): Promise<Post> {
 		const {post, reaction} = await this.getPostAndReactionOrThrow(addReactionDto);
 

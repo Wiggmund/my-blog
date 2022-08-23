@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Controller, DefaultValuePipe, Delete, Get, Param, Patch, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateRoleDto} from './dto/create-role.dto';
 import {RolesService} from './roles.service';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
@@ -8,7 +8,7 @@ import {ValidationPipe} from '../common/pipes/validation.pipe';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
 import { AddRemoveRoleDto } from './dto/add-remove-role.dto';
-import { UsersService } from 'src/users/users.service';
+
 
 @Roles('ADMIN')
 @UseGuards(JwtRolesGuard)
@@ -48,19 +48,11 @@ export class RolesController {
 		return this.rolesService.createRole(roleDto);
 	}
 
-	@ApiOperation({description: 'Add specific role for user with given id'})
-	@ApiResponse({status: 200, type: User})
-	@UsePipes(ValidationPipe)
-	@Post('add')
-	addRole(@Body() addRoleDto: AddRemoveRoleDto) {
-		return this.rolesService.addRole(addRoleDto);
-	}
 
-	@ApiOperation({description: 'Remove specific role for user with given id'})
-	@ApiResponse({status: 200, type: User})
-	@UsePipes(ValidationPipe)
-	@Post('remove')
-	removeRole(@Body() removeRoleDto: AddRemoveRoleDto) {
-		return this.rolesService.removeRole(removeRoleDto);
+	@ApiOperation({description: 'Delete role'})
+	@ApiResponse({status: 200, type: Number, description: 'Returns number of deleted roles'})
+	@Delete()
+	deleteRole(@Body('role', new DefaultValuePipe('')) role: string) {
+		return this.rolesService.deleteRole(role);
 	}
 }

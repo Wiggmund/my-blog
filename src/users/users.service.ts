@@ -51,6 +51,10 @@ export class UsersService {
 		return newUser;
 	}
 
+	async deleleUser(id: number) {
+		return this.userModel.destroy({where: {id}});
+	}
+
 	private async isUserExists(id: number, include): Promise<User> {
 		const user = await this.userModel.findByPk(id, {include});
 		if (!user) {

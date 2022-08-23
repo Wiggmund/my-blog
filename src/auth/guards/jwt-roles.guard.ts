@@ -19,6 +19,10 @@ export class JwtRolesGuard implements CanActivate {
 
 		const request = context.switchToHttp().getRequest<Request>();
 		const authorization = request.headers.authorization;
+		if (!authorization) {
+			throw new UnauthorizedException('You are not authorized or you input wrong credantials');
+		}
+
 		const [bearer, token] = authorization.split(' ');
 		const userData = await this.tokenService.validateAccessToken(token);
 

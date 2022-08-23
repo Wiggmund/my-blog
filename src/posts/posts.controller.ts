@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {PostsService} from './posts.service';
 import {Post as PostModel} from './models/post.model';
@@ -65,10 +65,17 @@ export class PostsController {
 		return this.postsService.createPost(postDto);
 	}
 
+	@ApiOperation({description: 'Delete post'})
+	@ApiResponse({status: 200, type: Number, description: 'Returns number of deleted posts'})
+	@Delete()
+	deletePost(@Body('id', ParseIntPipe) id: number) {
+		return this.postsService.deletePost(id);
+	}
+
 	@ApiOperation({description: 'Add or increment (if this reaction exists) specific reaction for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('add/reaction')
+	@Patch('reaction')
 	addOrIncrementReaction(@Body() addReactionDto: AddRemoveReactionDto) {
 		return this.postsService.addOrIncrementReaction(addReactionDto);
 	}
@@ -76,7 +83,7 @@ export class PostsController {
 	@ApiOperation({description: 'Remove or decrement (if this reaction exists) specific reaction for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('remove/reaction')
+	@Delete('reaction')
 	removeOrDecrementReaction(@Body() removeReactionDto: AddRemoveReactionDto) {
 		return this.postsService.removeOrDecrementReaction(removeReactionDto);
 	}
@@ -84,7 +91,7 @@ export class PostsController {
 	@ApiOperation({description: 'Add specific hashtag for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('add/hashTag')
+	@Patch('hashTag')
 	addHashTag(@Body() addHashTagDto: AddRemoveHashTagDto) {
 		return this.postsService.addHashTag(addHashTagDto);
 	}
@@ -92,7 +99,7 @@ export class PostsController {
 	@ApiOperation({description: 'Remove specific hashtag for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('remove/hashTag')
+	@Delete('hashTag')
 	removeHashTag(@Body() removeHashTagDto: AddRemoveHashTagDto) {
 		return this.postsService.removeHashTag(removeHashTagDto);
 	}
@@ -100,7 +107,7 @@ export class PostsController {
 	@ApiOperation({description: 'Add author for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('add/user')
+	@Patch('user')
 	addUser(@Body() addUserDto: AddRemoveUserDto) {
 		return this.postsService.addUser(addUserDto);
 	}
@@ -108,7 +115,7 @@ export class PostsController {
 	@ApiOperation({description: 'Remove author for post with given id'})
 	@ApiResponse({status: 200, type: PostModel})
 	@UsePipes(ValidationPipe)
-	@Post('remove/user')
+	@Delete('user')
 	removeUser(@Body() addUserDto: AddRemoveUserDto) {
 		return this.postsService.removeUser(addUserDto);
 	}

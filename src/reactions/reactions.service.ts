@@ -46,13 +46,12 @@ export class ReactionsService {
 		);
 	}
 
-	async removeReaction(reaction: string): Promise<boolean> {
-		await this.reactionModel.destroy(
+	async removeReaction(reaction: string) {
+		return this.reactionModel.destroy(
 			{
 				where: {
 					reaction: this.utilsService.makeSafeLowerString(reaction)}
 			}
 		);
-		return true;
 	}
 }
