@@ -7,6 +7,8 @@ import {User} from '../users/models/user.model';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
+import { AddRemoveRoleDto } from './dto/add-remove-role.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Roles('ADMIN')
 @UseGuards(JwtRolesGuard)
@@ -34,7 +36,7 @@ export class RolesController {
 	@ApiOperation({description: 'Get users which have this role id'})
 	@ApiResponse({status: 200, type: [User]})
 	@Get(':id/users')
-	getRolePosts(@Param('id') id: number) {
+	getRoleUsers(@Param('id') id: number) {
 		return this.rolesService.getRoleUsers(id);
 	}
 
@@ -44,5 +46,21 @@ export class RolesController {
 	@Post()
 	createRole(@Body() roleDto: CreateRoleDto) {
 		return this.rolesService.createRole(roleDto);
+	}
+
+	@ApiOperation({description: 'Add specific role for user with given id'})
+	@ApiResponse({status: 200, type: User})
+	@UsePipes(ValidationPipe)
+	@Post('add')
+	addRole(@Body() addRoleDto: AddRemoveRoleDto) {
+		return this.rolesService.addRole(addRoleDto);
+	}
+
+	@ApiOperation({description: 'Remove specific role for user with given id'})
+	@ApiResponse({status: 200, type: User})
+	@UsePipes(ValidationPipe)
+	@Post('remove')
+	removeRole(@Body() removeRoleDto: AddRemoveRoleDto) {
+		return this.rolesService.removeRole(removeRoleDto);
 	}
 }

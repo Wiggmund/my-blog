@@ -5,8 +5,6 @@ import {CreateUserDto} from './dto/create-user.dto';
 import {RolesService} from '../roles/roles.service';
 import {Role} from '../roles/models/role.model';
 import {Post} from '../posts/models/post.model';
-import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
-import { RefreshToken } from 'src/auth/models/token.model';
 
 @Injectable()
 export class UsersService {
@@ -48,36 +46,5 @@ export class UsersService {
 		}
 		await newUser.$add('roles', defaultRole);
 		return newUser;
-	}
-
-	async addRole(addRoleDto: AddRemoveRoleDto): Promise<User> {
-		const {user, role} = await this.getUserAndRole(addRoleDto);
-		await user.$add('roles', role);
-
-		return user;
-	}
-
-	async removeRole(removeRoleDto: AddRemoveRoleDto): Promise<User> {
-		const {user, role} = await this.getUserAndRole(removeRoleDto);
-
-		if (await user.$has('roles', role)) {
-			await user.$remove('roles', role);
-		}
-
-		return user;
-	}
-
-	private async getUserAndRole(dto: AddRemoveRoleDto) {
-		const user = await this.getUserById(dto.userId);
-		if (!user) {
-			throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-		}
-
-		const role = await this.rolesService.getRoleByValue(dto.role);
-		if (!role) {
-			throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
-		}
-
-		return {user, role};
 	}
 }

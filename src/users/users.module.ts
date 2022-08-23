@@ -6,12 +6,12 @@ import {User} from './models/user.model';
 import {UsersPosts} from './models/users-posts.model';
 import {UsersRoles} from './models/users-roles.model';
 import {RolesModule} from '../roles/roles.module';
-import {RefreshToken} from '../auth/models/token.model';
 import { AuthModule } from 'src/auth/auth.module';
+import { Role } from 'src/roles/models/role.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, UsersPosts, UsersRoles, RefreshToken]),
+    SequelizeModule.forFeature([User, UsersPosts, UsersRoles]),
     RolesModule,
 	forwardRef(() => AuthModule)
   ],

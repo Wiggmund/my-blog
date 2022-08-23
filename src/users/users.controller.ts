@@ -52,20 +52,4 @@ export class UsersController {
 	createUser(@Body() userDto: CreateUserDto) {
 		return this.usersService.createUser(userDto);
 	}
-
-	@ApiOperation({description: 'Add specific role for user with given id'})
-	@ApiResponse({status: 200, type: User})
-	@UsePipes(ValidationPipe)
-	@Post('add/role')
-	addRole(@Body() addRoleDto: AddRemoveRoleDto) {
-		return this.usersService.addRole(addRoleDto);
-	}
-
-	@ApiOperation({description: 'Remove specific role for user with given id'})
-	@ApiResponse({status: 200, type: User})
-	@UsePipes(ValidationPipe)
-	@Post('remove/role')
-	removeRole(@Body() removeRoleDto: AddRemoveRoleDto) {
-		return this.usersService.removeRole(removeRoleDto);
-	}
 }
