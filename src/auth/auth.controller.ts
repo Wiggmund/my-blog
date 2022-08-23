@@ -2,6 +2,7 @@ import {Body, Controller, Get, Post, Res, UseGuards, UsePipes} from '@nestjs/com
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { Response } from 'express';
 import { REFRESH_TOKEN_EXPIRES_DAYS } from 'src/common/constants';
+import { Cookies } from 'src/common/decorators/cookies.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
@@ -50,6 +51,41 @@ export class AuthController {
 			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
 		})
 		return userData;
+	}
+
+	@ApiOperation({description: 'Logout from user account'})
+	@ApiResponse({status: 200})
+	@Post('/logout')
+	async logout(
+		@Res({passthrough: true}) response: Response,
+		@Cookies('refreshToken') refreshToken: string
+	) {
+		if (refreshToken) {
+			await this.tokenService.removeToken(refreshToken);
+		}
+		response.clearCookie('refreshToken');
+		return {
+			deleted: true,
+			token: refreshToken
+		};
+	}
+
+
+	@ApiOperation({description: 'Refresh user refreshToken and get new pair access/refresh tokens'})
+	@ApiResponse({status: 200})
+	@Post('/refresh')
+	async refresh(
+		@Res({passthrough: true}) response: Response,
+		@Cookies('refreshToken') refreshToken: string
+	) {
+		const refreshedTokens = await this.tokenService.refreshToken(refreshToken);
+		
+		response.cookie('refreshToken', refreshedTokens.refreshToken, {
+			httpOnly: true,
+			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
+		});
+
+		return refreshedTokens;
 	}
 
 	@ApiOperation({description: 'Get all refresh tokens'})
