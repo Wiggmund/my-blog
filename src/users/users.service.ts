@@ -3,7 +3,7 @@ import {InjectModel} from '@nestjs/sequelize';
 import {User} from './models/user.model';
 import {CreateUserDto} from './dto/create-user.dto';
 import {RolesService} from '../roles/roles.service';
-import {Role} from '../roles/models/role.model';
+import {Role, RoleCreationAttrs} from '../roles/models/role.model';
 import {Post} from '../posts/models/post.model';
 
 @Injectable()
@@ -27,12 +27,15 @@ export class UsersService {
 	}
 
 	async getUserRoles(id: number): Promise<string[]> {
-		const roleObjects = (await this.userModel.findByPk(id, {include: Role})).roles;
+		const user = await this.isUserExists(id, [Role]);
+		const roleObjects = user.roles;
 		return roleObjects.map((roleObject: Role) => roleObject.role);
 	}
 
 	async getUserPosts(id: number): Promise<Post[]> {
-		return (await this.userModel.findByPk(id, {include: Post})).posts;
+		const user = await this.isUserExists(id, [Post]);
+		const postObjects = user.posts;
+		return postObjects;
 	}
 
 	async createUser(userDto: CreateUserDto): Promise<User> {
@@ -46,5 +49,14 @@ export class UsersService {
 		}
 		await newUser.$add('roles', defaultRole);
 		return newUser;
+	}
+
+	private async isUserExists(id: number, include): Promise<User> {
+		const user = await this.userModel.findByPk(id, {include});
+		if (!user) {
+			throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+		}
+
+		return user;
 	}
 }

@@ -3,7 +3,7 @@ import {UsersRoles} from '../../users/models/users-roles.model';
 import {User} from '../../users/models/user.model';
 import {ApiProperty} from '@nestjs/swagger';
 
-interface  RoleCreationAttrs {
+export interface  RoleCreationAttrs {
 	role: string;
 	description: string;
 }
