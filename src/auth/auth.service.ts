@@ -65,5 +65,4 @@ export class AuthService {
 		await this.tokenService.saveToken(userPayload.id, refreshToken);
 		return {refreshToken, accessToken};
 	}
-
 }

@@ -7,12 +7,14 @@ import {TokenService} from './token.service';
 import {SequelizeModule} from '@nestjs/sequelize';
 import {RefreshToken} from './models/token.model';
 import { JwtRolesGuard } from './guards/jwt-roles.guard';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    forwardRef(() => UsersModule),
+	SequelizeModule.forFeature([RefreshToken]),
     JwtModule.register({}),
-    SequelizeModule.forFeature([RefreshToken])
+    forwardRef(() => UsersModule),
+	ConfigModule
   ],
   providers: [
     AuthService,

@@ -1,7 +1,6 @@
 import {Body, Controller, Get, Post, Res, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { Response } from 'express';
-import { REFRESH_TOKEN_EXPIRES_DAYS } from 'src/common/constants';
 import { Cookies } from 'src/common/decorators/cookies.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -30,10 +29,7 @@ export class AuthController {
 		@Res({ passthrough: true }) response: Response
 	) {
 		const userData = await this.authService.register(userDto);
-		response.cookie('refreshToken', userData.refreshToken, {
-			httpOnly: true,
-			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
-		})
+		this.tokenService.saveTokenToCookie(userData.refreshToken, response);
 		return userData;
 	}
 
@@ -46,10 +42,7 @@ export class AuthController {
 		@Res({ passthrough: true }) response: Response
 	) {
 		const userData = await this.authService.login(userDto);
-		response.cookie('refreshToken', userData.refreshToken, {
-			httpOnly: true,
-			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
-		})
+		this.tokenService.saveTokenToCookie(userData.refreshToken, response);
 		return userData;
 	}
 
@@ -64,10 +57,6 @@ export class AuthController {
 			await this.tokenService.removeToken(refreshToken);
 		}
 		response.clearCookie('refreshToken');
-		return {
-			deleted: true,
-			token: refreshToken
-		};
 	}
 
 
@@ -78,21 +67,15 @@ export class AuthController {
 		@Res({passthrough: true}) response: Response,
 		@Cookies('refreshToken') refreshToken: string
 	) {
-		const refreshedTokens = await this.tokenService.refreshToken(refreshToken);
-		
-		response.cookie('refreshToken', refreshedTokens.refreshToken, {
-			httpOnly: true,
-			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000
-		});
-
-		return refreshedTokens;
+		const newTokens = await this.tokenService.refreshToken(refreshToken);
+		this.tokenService.saveTokenToCookie(newTokens.refreshToken, response);
+		return newTokens;
 	}
 
 	@ApiOperation({description: 'Get all refresh tokens'})
 	@ApiResponse({status: 200, type: [RefreshToken]})
 	@Roles('ADMIN')
 	@UseGuards(JwtRolesGuard)
-	@UsePipes(ValidationPipe)
 	@Get('/tokens')
 	getAllRefreshTokens() {
 		return this.tokenService.getAllRefreshTokens();

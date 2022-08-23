@@ -7,25 +7,32 @@ import { HashtagsModule } from './hashtags/hashtags.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import {UtilsModule} from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    PostsModule,
+	ConfigModule.forRoot({
+		cache: true
+	}),
+
+
+	PostsModule,
     UsersModule,
     ReactionsModule,
     RolesModule,
     HashtagsModule,
     UtilsModule,
+	AuthModule,
+
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'root',
-      database: 'my_blog',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       autoLoadModels: true,
-    }),
-    AuthModule
+    })
   ],
   controllers: [],
   providers: [],

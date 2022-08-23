@@ -1,28 +1,33 @@
 import {Injectable, UnauthorizedException} from '@nestjs/common';
-import {ACCESS_TOKEN, ACCESS_TOKEN_EXPIRES_MINUTES, REFRESH_TOKEN, REFRESH_TOKEN_EXPIRES_DAYS} from '../common/constants';
 import {JwtService} from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { RefreshToken } from './models/token.model';
 import { User } from 'src/users/models/user.model';
 import { RefreshAccessTokens } from './dto/refresh-access-tokens.dto';
 import { UserPayloadDto } from 'src/users/dto/user-payload.dto';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class TokenService {
 	constructor(
 		@InjectModel(RefreshToken) private tokenModel,
-		private jwtService: JwtService
+		private jwtService: JwtService,
+		private configService: ConfigService
 	) {}
 
 	generateToken(payload): RefreshAccessTokens {
+		const accessExpiresIn = this.configService.get<string>('JWT_ACCESS_TOKEN_EXPIRES_MINUTES');
+		const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRES_DAYS');
+		console.log(accessExpiresIn, refreshExpiresIn)
 		const accessToken = this.jwtService.sign(payload, {
-			secret: ACCESS_TOKEN,
-			expiresIn: `${ACCESS_TOKEN_EXPIRES_MINUTES}m`
+			secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+			expiresIn: `${accessExpiresIn}m`
 		});
 
 		const refreshToken = this.jwtService.sign(payload, {
-			secret: REFRESH_TOKEN,
-			expiresIn: `${REFRESH_TOKEN_EXPIRES_DAYS}d`
+			secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+			expiresIn: `${refreshExpiresIn}d`
 		});
 
 		return {accessToken, refreshToken};
@@ -31,7 +36,7 @@ export class TokenService {
 	async validateAccessToken(token: string) {
 		try {
 			const payloadData = this.jwtService.verify(token, {
-				secret: ACCESS_TOKEN
+				secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET')
 			});
 
 			return payloadData;
@@ -43,7 +48,7 @@ export class TokenService {
 	async validateRefreshToken(token: string) {
 		try {
 			const payloadData = this.jwtService.verify(token, {
-				secret: REFRESH_TOKEN
+				secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET')
 			});
 
 			return payloadData;
@@ -60,6 +65,14 @@ export class TokenService {
 		}
 
 		return this.tokenModel.create({token: refreshToken, userId});
+	}
+
+	saveTokenToCookie(token, response: Response) {
+		const expiresIn = Number(this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRES_DAYS'));
+		response.cookie('refreshToken', token, {
+			httpOnly: true,
+			maxAge: expiresIn * 24 * 60 * 60 * 1000
+		});
 	}
 
 	async removeToken(token: string) {
