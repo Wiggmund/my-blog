@@ -15,7 +15,8 @@ export class UsersService {
 	) {}
 
 	async getAllUsers(): Promise<User[]> {
-		return this.userModel.findAll();
+		const returnedFields = ['id', 'username', 'email', 'isActivated', 'photo'];
+		return this.userModel.findAll({attributes: returnedFields});
 	}
 
 	async getUserByEmail(email: string): Promise<User> {
