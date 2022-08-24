@@ -7,10 +7,11 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
 import { AuthService } from './auth.service';
-import { RefreshAccessTokens } from './dto/refresh-access-tokens.dto';
+import { UserDataDto } from './dto/user-data.dto';
 import { JwtRolesGuard } from './guards/jwt-roles.guard';
 import { RefreshToken } from './models/token.model';
 import { TokenService } from './token.service';
+
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -21,7 +22,7 @@ export class AuthController {
 	) {}
 
 	@ApiOperation({description: 'Register a new user'})
-	@ApiResponse({status: 200, type: RefreshAccessTokens})
+	@ApiResponse({status: 200, type: UserDataDto})
 	@UsePipes(ValidationPipe)
 	@Post('/register')
 	async register(
@@ -34,7 +35,7 @@ export class AuthController {
 	}
 
 	@ApiOperation({description: 'Login into user account'})
-	@ApiResponse({status: 200, type: RefreshAccessTokens})
+	@ApiResponse({status: 200, type: UserDataDto})
 	@UsePipes(ValidationPipe)
 	@Post('/login')
 	async login(
@@ -61,8 +62,8 @@ export class AuthController {
 
 
 	@ApiOperation({description: 'Refresh user refreshToken and get new pair access/refresh tokens'})
-	@ApiResponse({status: 200})
-	@Post('/refresh')
+	@ApiResponse({status: 200, type: UserDataDto})
+	@Get('/refresh')
 	async refresh(
 		@Res({passthrough: true}) response: Response,
 		@Cookies('refreshToken') refreshToken: string
