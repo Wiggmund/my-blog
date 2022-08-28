@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserPayloadDto } from 'src/auth/dto/user-payload.dto';
+import { UserPayloadDto } from './user-payload.dto';
 
 export class UserDataDto {
 	@ApiProperty({description: 'User\' refresh token', example: 'sdfjSKJdfksDF...'})

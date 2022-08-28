@@ -5,8 +5,8 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Reaction} from './models/reaction.model';
 import {Post as PostModel} from '../posts/models/post.model';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { JwtRolesGuard } from '../auth/guards/jwt-roles.guard';
 
 @Roles('ADMIN')
 @UseGuards(JwtRolesGuard)

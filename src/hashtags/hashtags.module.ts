@@ -4,7 +4,7 @@ import { HashtagsController } from './hashtags.controller';
 import {SequelizeModule} from '@nestjs/sequelize';
 import {HashTag} from './models/hashtag.model';
 import {UtilsModule} from '../utils/utils.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [

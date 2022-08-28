@@ -2,12 +2,12 @@ import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { RefreshToken } from './models/token.model';
-import { User } from 'src/users/models/user.model';
-import { UserPayloadDto } from 'src/auth/dto/user-payload.dto';
+import { User } from '../users/models/user.model';
+import { UserPayloadDto } from '../auth/dto/user-payload.dto';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { ITokens } from './interfaces/tokens.interface';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { UserDataDto } from './dto/user-data.dto';
 
 @Injectable()

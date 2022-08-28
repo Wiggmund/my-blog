@@ -4,7 +4,7 @@ import {Role} from './models/role.model';
 import {CreateRoleDto} from './dto/create-role.dto';
 import {User} from '../users/models/user.model';
 import { AddRemoveRoleDto } from './dto/add-remove-role.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class RolesService {

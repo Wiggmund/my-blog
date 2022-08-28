@@ -5,7 +5,7 @@ import {LoginUserDto} from '../users/dto/login-user.dto';
 import * as bcrypt from 'bcrypt';
 import {TokenService} from './token.service';
 import {UserPayloadDto} from './dto/user-payload.dto';
-import { User } from 'src/users/models/user.model';
+import { User } from '../users/models/user.model';
 import { UserDataDto } from './dto/user-data.dto';
 
 @Injectable()

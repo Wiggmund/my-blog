@@ -1,10 +1,10 @@
 import {Body, Controller, Get, Post, Res, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import { Response } from 'express';
-import { Cookies } from 'src/common/decorators/cookies.decorator';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { Cookies } from '../common/decorators/cookies.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginUserDto } from '../users/dto/login-user.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
 import { AuthService } from './auth.service';
 import { UserDataDto } from './dto/user-data.dto';

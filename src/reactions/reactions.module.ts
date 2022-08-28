@@ -4,7 +4,7 @@ import { ReactionsController } from './reactions.controller';
 import {SequelizeModule} from '@nestjs/sequelize';
 import {Reaction} from './models/reaction.model';
 import {UtilsModule} from '../utils/utils.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [

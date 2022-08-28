@@ -5,9 +5,9 @@ import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {User} from './models/user.model';
 import {AddRemoveRoleDto} from '../roles/dto/add-remove-role.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
-import { RolesService } from 'src/roles/roles.service';
+import { Roles } from '../common/decorators/roles.decorator';
+import { JwtRolesGuard } from '../auth/guards/jwt-roles.guard';
+import { RolesService } from '../roles/roles.service';
 
 @Roles('ADMIN')
 @UseGuards(JwtRolesGuard)

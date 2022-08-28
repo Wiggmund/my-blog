@@ -10,8 +10,8 @@ import {AddRemoveReactionDto} from '../reactions/dto/add-remove-reaction.dto';
 import {AddRemoveHashTagDto} from '../hashtags/dto/add-remove-hashTag.dto';
 import {AddRemoveUserDto} from '../users/dto/add-remove-user.dto';
 import {ValidationPipe} from '../common/pipes/validation.pipe';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { JwtRolesGuard } from 'src/auth/guards/jwt-roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { JwtRolesGuard } from '../auth/guards/jwt-roles.guard';
 
 @Roles('ADMIN')
 @UseGuards(JwtRolesGuard)

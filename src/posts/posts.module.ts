@@ -8,7 +8,7 @@ import {PostsHashTags} from './models/posts-hashTags.model';
 import {ReactionsModule} from '../reactions/reactions.module';
 import {UsersModule} from '../users/users.module';
 import {HashtagsModule} from '../hashtags/hashtags.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
